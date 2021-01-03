@@ -2,8 +2,9 @@
 This is the console executable, that makes use of the fSnakeGame class.
 This is handling all user interaction. For game logic, please see fSnakeGame.h.
 */
-
 #include "fSnakeGame.h"
+#include <stdio.h>
+#include <time.h>
 
 // Unreal standards
 using int32 = int;

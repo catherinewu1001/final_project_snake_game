@@ -11,6 +11,8 @@ The game is a very simple version of the classic snake game.
 #ifndef FSNAKEGAME_H
 #define FSNAKEGAME_H
 
+
+
 // Unreal standards
 using int32 = int;
 
@@ -25,13 +27,18 @@ class fSnakeGame
 {
 private:
 	int32 score, del, maxwidth, maxheight;
-	char direction, partchar, edgechar, fruitchar;
+	char direction, partchar, edgechar, fruitchar, badfruitchar, aachar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
 	// fruitchar is the character representing the fruit
 	// del stands for delay
 	bool bEatsFruit;
+	bool bEatsBadFruit;
+
 	CharPosition fruit; // need to clarify this combination 
+	CharPosition badfruit;  
+	CharPosition aa;  
+
 	std::vector<CharPosition> snake; // represent the snake's body
 
 	void InitGameWindow();
@@ -39,9 +46,13 @@ private:
 	void DrawSnake();
 	void PrintScore();
 	void PositionFruit();
+ 	void PositionBadFruit();   
+	void Positionaa();   
+
 	bool FatalCollision();
 	void MoveSnake();
 	bool GetsFruit();
+	bool GetsBadFruit();
 
 public:
 	fSnakeGame();

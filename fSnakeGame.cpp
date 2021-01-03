@@ -1,6 +1,10 @@
 #include "fSnakeGame.h"
 #include <unistd.h>
 
+#include <stdio.h>
+#include <time.h>
+time_t t1 = time(NULL);
+
 using namespace std;
 
 // Unreal coding standards
@@ -26,14 +30,19 @@ fSnakeGame::fSnakeGame()
 	fruitchar = '*'; 
 	fruit.x = 0;
 	fruit.y = 0;
+    badfruitchar = 'N'; 
+	badfruit.x = 0;
+	badfruit.y = 0;
 	score = 0;
 	del = 150000;
 	bool bEatsFruit = 0;
+	bool bEatsBadFruit = 1; //這邊要改
 	direction = 'l';
 	srand(time(NULL));
 	
 	InitGameWindow();
 	PositionFruit();
+    PositionBadFruit();
 	DrawWindow();
 	DrawSnake();
 	PrintScore();
@@ -91,7 +100,7 @@ void fSnakeGame::DrawWindow()
 	return;
 }
 
-// draw snake's body???
+// draw snake's body
 void fSnakeGame::DrawSnake()
 {
 	for (int32 i = 0; i < 5; i++) 
@@ -114,6 +123,8 @@ void fSnakeGame::PrintScore()
 	printw("Score: %d", score);
 	return;
 }
+
+
 
 // position a new fruit in the game window
 void fSnakeGame::PositionFruit()
@@ -149,6 +160,43 @@ void fSnakeGame::PositionFruit()
 	refresh();
 }
 
+
+// 毒蘋果
+void fSnakeGame::PositionBadFruit()
+{
+	while(1)
+	{
+		int32 tmpx = rand()%maxwidth+1; // +1 to avoid the 0
+		int32 tmpy = rand()%maxheight+1;
+
+		// check that the fruit is not positioned on the snake
+		for (int32 i = 0; i < snake.size(); i++)
+		{
+			if (snake[i].x == tmpx && snake[i].y == tmpy)
+			{
+				continue; // if true, ignore the following and go back to the beginning of function
+			}
+		}
+
+		// check that the fruit is positioned within the game window
+		if (tmpx >= maxwidth-2 || tmpy >= maxheight-3)
+		{
+			continue; // if true, ignore the following and go back to the beginning of function
+		}
+
+		// if the coordinates are valid, add fruit in the window
+		badfruit.x = tmpx;
+		badfruit.y = tmpy;
+		break;
+	}
+
+	move(badfruit.y, badfruit.x); 
+	addch(badfruitchar);
+	refresh();
+}
+
+
+
 // set game over situations
 bool fSnakeGame::FatalCollision()
 {
@@ -180,7 +228,7 @@ bool fSnakeGame::GetsFruit()
 		PrintScore();
 
 		// if score is a multiple of 100, increase snake speed
-		if ((score%100) == 0)
+		if ((score%50) == 0)
 		{
 			del -= 1000;
 		}
@@ -191,6 +239,31 @@ bool fSnakeGame::GetsFruit()
 		return bEatsFruit = false;
 	}
 	return bEatsFruit;
+}
+
+bool fSnakeGame::GetsBadFruit()
+{	
+	
+	if (snake[0].x == badfruit.x && snake[0].y == badfruit.y)//無限增生........
+	{
+		PositionBadFruit(); 
+		score -= 10; 
+		PrintScore();
+
+		return bEatsBadFruit = false;
+	}
+	
+	else if(t1%1 == 0){
+		PositionBadFruit(); 
+		return bEatsBadFruit = false;//無限增生........
+	}
+	
+	else 
+	{
+		return bEatsBadFruit = true;
+	}
+	return bEatsBadFruit;
+	
 }
 
 // define snake's movements
@@ -258,7 +331,8 @@ void fSnakeGame::PlayGame()
             break;
         }
 
-        GetsFruit();
+        GetsFruit();	
+		GetsBadFruit();
         MoveSnake();
 
         if (direction=='q') //exit
