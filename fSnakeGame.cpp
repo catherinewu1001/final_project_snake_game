@@ -1,6 +1,12 @@
 #include "fSnakeGame.h"
 #include <unistd.h>
 
+#include <stdio.h>
+#include <time.h>
+
+
+time_t t1 = time(NULL);
+
 using namespace std;
 
 // Unreal coding standards
@@ -21,28 +27,30 @@ CharPosition::CharPosition()
 fSnakeGame::fSnakeGame()
 {
 	// variables initialisation:
-	partchar = 'x';		  // character to represent the snake
+	partchar = 'x'; // character to represent the snake
 	edgechar = (char)219; // full rectangle on the key table
-	fruitchar = '*';
+	fruitchar = '*'; 
 	fruit.x = 0;
 	fruit.y = 0;
+    badfruitchar = 'N'; 
+	badfruit.x = 0;
+	badfruit.y = 0;
 	score = 0;
-	char grade = 'C';
-	del = 110000;
+	del = 150000;
 	bool bEatsFruit = 0;
+	bool bEatsBadFruit = 1; //這邊要改
 	direction = 'l';
-
 	srand(time(NULL));
-
+	
 	InitGameWindow();
 	PositionFruit();
+    PositionBadFruit();
 	DrawWindow();
 	DrawSnake();
 	PrintScore();
 	PrintName();
-	// UserGrade();
 
-	refresh();
+	refresh();	
 }
 
 fSnakeGame::~fSnakeGame()
@@ -53,15 +61,17 @@ fSnakeGame::~fSnakeGame()
 }
 
 // initialise the game window
-void fSnakeGame::InitGameWindow()
-{
+void fSnakeGame::InitGameWindow() 
+{ 
 	initscr(); // initialise the screen
-	nodelay(stdscr, TRUE);
-	keypad(stdscr, true);				   // initialise the keyboard: we can use arrows for directions
-	noecho();							   // user input is not displayed on the screen
-	curs_set(0);						   // cursor symbol is not not displayed on the screen (Linux)
+	start_color(); // we can now use colours in the terminal
+	init_pair(1, COLOR_WHITE, COLOR_YELLOW); 
+	nodelay(stdscr,TRUE);
+	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
+	noecho(); // user input is not displayed on the screen
+	curs_set(0); // cursor symbol is not not displayed on the screen (Linux)
 	getmaxyx(stdscr, maxheight, maxwidth); // define dimensions of game window
-	return;
+	return; 
 }
 
 // draw the game window
@@ -75,19 +85,19 @@ void fSnakeGame::DrawWindow()
 
 	for (int32 i = 0; i < maxwidth; i++) // draws bottom
 	{
-		move(maxheight - 2, i);
+		move(maxheight-2, i);
 		addch(edgechar);
 	}
 
-	for (int32 i = 0; i < maxheight - 1; i++) // draws left side
+	for (int32 i = 0; i < maxheight-1; i++) // draws left side
 	{
 		move(i, 0);
 		addch(edgechar);
 	}
 
-	for (int32 i = 0; i < maxheight - 1; i++) // draws right side
+	for (int32 i = 0; i < maxheight-1; i++) // draws right side
 	{
-		move(i, maxwidth - 1);
+		move(i, maxwidth-1);
 		addch(edgechar);
 	}
 	return;
@@ -96,9 +106,9 @@ void fSnakeGame::DrawWindow()
 // draw snake's body
 void fSnakeGame::DrawSnake()
 {
-	for (int32 i = 0; i < 5; i++)
+	for (int32 i = 0; i < 5; i++) 
 	{
-		snake.push_back(CharPosition(30 + i, 10));
+		snake.push_back(CharPosition(30+i, 10));
 	}
 
 	for (int32 i = 0; i < snake.size(); i++)
@@ -112,7 +122,7 @@ void fSnakeGame::DrawSnake()
 // print score at bottom of window
 void fSnakeGame::PrintScore()
 {
-	move(maxheight - 1, 0);
+	move(maxheight-1, 0);
 	printw("Score: %d", score);
 	return;
 }
@@ -122,16 +132,18 @@ void fSnakeGame::PrintName()
 {
 	move(maxheight - 1, 15);
 	printw("Player: ");
+	printw(name);
 	return;
 }
+
 
 // position a new fruit in the game window
 void fSnakeGame::PositionFruit()
 {
-	while (1)
+	while(1)
 	{
-		int32 tmpx = rand() % maxwidth + 1; // +1 to avoid the 0
-		int32 tmpy = rand() % maxheight + 1;
+		int32 tmpx = rand()%maxwidth+1; // +1 to avoid the 0
+		int32 tmpy = rand()%maxheight+1;
 
 		// check that the fruit is not positioned on the snake
 		for (int32 i = 0; i < snake.size(); i++)
@@ -143,7 +155,7 @@ void fSnakeGame::PositionFruit()
 		}
 
 		// check that the fruit is positioned within the game window
-		if (tmpx >= maxwidth - 2 || tmpy >= maxheight - 3)
+		if (tmpx >= maxwidth-2 || tmpy >= maxheight-3)
 		{
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
@@ -154,16 +166,53 @@ void fSnakeGame::PositionFruit()
 		break;
 	}
 
-	move(fruit.y, fruit.x);
+	move(fruit.y, fruit.x); 
 	addch(fruitchar);
 	refresh();
 }
+
+
+// 毒蘋果
+void fSnakeGame::PositionBadFruit()
+{
+	while(1)
+	{
+		int32 tmpx = rand()%maxwidth+1; // +1 to avoid the 0
+		int32 tmpy = rand()%maxheight+1;
+
+		// check that the fruit is not positioned on the snake
+		for (int32 i = 0; i < snake.size(); i++)
+		{
+			if (snake[i].x == tmpx && snake[i].y == tmpy)
+			{
+				continue; // if true, ignore the following and go back to the beginning of function
+			}
+		}
+
+		// check that the fruit is positioned within the game window
+		if (tmpx >= maxwidth-2 || tmpy >= maxheight-3)
+		{
+			continue; // if true, ignore the following and go back to the beginning of function
+		}
+
+		// if the coordinates are valid, add fruit in the window
+		badfruit.x = tmpx;
+		badfruit.y = tmpy;
+		break;
+	}
+
+	move(badfruit.y, badfruit.x); 
+	addch(badfruitchar);
+	refresh();
+}
+
+
 
 // set game over situations
 bool fSnakeGame::FatalCollision()
 {
 	// if the snake hits the edge of the window
-	if (snake[0].x == 0 || snake[0].x == maxwidth - 1 || snake[0].y == 0 || snake[0].y == maxheight - 2)
+	if (snake[0].x == 0 || snake[0].x == maxwidth-1 || snake[0].y == 0 || snake[0].y == maxheight-2)
 	{
 		return true;
 	}
@@ -185,64 +234,81 @@ bool fSnakeGame::GetsFruit()
 {
 	if (snake[0].x == fruit.x && snake[0].y == fruit.y)
 	{
-		PositionFruit();
-		score += 10;
+		PositionFruit(); 
+		score +=10; 
 		PrintScore();
 
 		// if score is a multiple of 100, increase snake speed
-		if ((score % 100) == 0)
+		if ((score%50) == 0)
 		{
 			del -= 1000;
 		}
 		return bEatsFruit = true;
 	}
-	else
+	else 
 	{
 		return bEatsFruit = false;
 	}
 	return bEatsFruit;
 }
 
+bool fSnakeGame::GetsBadFruit()
+{	
+	
+	if (snake[0].x == badfruit.x && snake[0].y == badfruit.y)//無限增生........
+	{
+		PositionBadFruit(); 
+		score -= 10; 
+		PrintScore();
+
+		return bEatsBadFruit = false;
+	}
+	/*
+	else if(t1%1 == 0){
+		PositionBadFruit(); 
+		return bEatsBadFruit = false;//無限增生........
+	}
+	*/
+	else 
+	{
+		return bEatsBadFruit = true;
+	}
+	return bEatsBadFruit;
+	
+}
+
 // define snake's movements
 void fSnakeGame::MoveSnake()
 {
 	int32 KeyPressed = getch();
-	switch (KeyPressed)
+	switch(KeyPressed)
 	{
-	case KEY_LEFT:
-		if (direction != 'r')
-		{
-			direction = 'l';
-		}
-		break;
-	case KEY_RIGHT:
-		if (direction != 'l')
-		{
-			direction = 'r';
-		}
-		break;
-	case KEY_UP:
-		if (direction != 'd')
-		{
-			direction = 'u';
-		}
-		break;
-	case KEY_DOWN:
-		if (direction != 'u')
-		{
-			direction = 'd';
-		}
-		break;
-	case KEY_BACKSPACE:
-		direction = 'q'; // key to quit the game
-		break;
+		case KEY_LEFT:
+			if (direction != 'r') 
+			{ direction = 'l'; }  
+			break;
+		case KEY_RIGHT:
+			if (direction != 'l')
+			{ direction = 'r'; }
+			break;
+		case KEY_UP:
+			if (direction != 'd')
+			{ direction = 'u'; }
+			break;
+		case KEY_DOWN:
+			if (direction != 'u')
+			{ direction = 'd'; }
+			break;
+		case KEY_BACKSPACE:
+			direction = 'q'; // key to quit the game
+			break;
 	}
 
 	// the snake doesn't eat fruit, remains same size
 	if (!bEatsFruit)
 	{
-		move(snake[snake.size() - 1].y, snake[snake.size() - 1].x); // moves at the end of the tail
-		printw(" ");												// add empty ch to remove last character
+		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
+		printw(" "); // add empty ch to remove last character
 		refresh();
 		snake.pop_back(); // removes the last element in the vector, reducing the container size by one
 	}
@@ -250,21 +316,13 @@ void fSnakeGame::MoveSnake()
 	// the snake moves and we add an extra character at the beginning of the vector
 	// add a head and initialise new coordinates for CharPosition according to the direction input
 	if (direction == 'l')
-	{
-		snake.insert(snake.begin(), CharPosition(snake[0].x - 1, snake[0].y));
-	}
+	{ snake.insert(snake.begin(), CharPosition(snake[0].x-1, snake[0].y)); } 
 	else if (direction == 'r')
-	{
-		snake.insert(snake.begin(), CharPosition(snake[0].x + 1, snake[0].y));
-	}
+	{ snake.insert(snake.begin(), CharPosition(snake[0].x+1, snake[0].y)); }
 	else if (direction == 'u')
-	{
-		snake.insert(snake.begin(), CharPosition(snake[0].x, snake[0].y - 1));
-	}
+	{ snake.insert(snake.begin(), CharPosition(snake[0].x, snake[0].y-1)); }
 	else if (direction == 'd')
-	{
-		snake.insert(snake.begin(), CharPosition(snake[0].x, snake[0].y + 1));
-	}
+	{ snake.insert(snake.begin(), CharPosition(snake[0].x, snake[0].y+1)); }
 
 	// move to the new CharPosition coordinates
 	move(snake[0].y, snake[0].x);
@@ -273,18 +331,10 @@ void fSnakeGame::MoveSnake()
 	return;
 }
 
-// void fSnakeGame::UserGrade()
-// {
-// 	move((maxheight) / 2, (maxwidth - 11) / 2);
-// 	printw(" Your grade is ");
-// 	refresh();
-// 	return;
-// }
-
 void fSnakeGame::PlayGame()
 {
-	while (1)
-	{
+    while(1)
+    {
 		if (FatalCollision())
 		{
 			move((maxheight - 2) / 2, (maxwidth - 5) / 2);
@@ -296,14 +346,15 @@ void fSnakeGame::PlayGame()
 			break;
 		}
 
-		GetsFruit();
-		MoveSnake();
+        GetsFruit();	
+		GetsBadFruit();
+        MoveSnake();
 
-		if (direction == 'q') //exit
-		{
-			break;
-		}
+        if (direction=='q') //exit
+        {
+        	break;
+        }
 
-		usleep(del); // delay
-	}
+        usleep(del); // delay
+    }
 }
