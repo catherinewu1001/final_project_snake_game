@@ -7,20 +7,19 @@ This is handling all user interaction. For game logic, please see fSnakeGame.h.
 #include <time.h>
 
 // Unreal standards
-using int32 = int;
 
-int32 maxheight, maxwidth;
+int maxheight, maxwidth;
 void PlayGame();
-int32 IsUserReady();
-int32 AskUserName();
-int32 AskUserToPlayAgain();
+int IsUserReady();
+int AskUserName();
+int AskUserToPlayAgain();
 void ClearCentre();
-int32 UserInput();
-int32 UserInputName();
+int UserInput();
+//int UserInputName();
 char name[10];
 
 
-int32 main ()
+int main ()
 {	
 	if (IsUserReady() == 'y') // wait for confirmation of the user
 	do {
@@ -54,9 +53,9 @@ void ClearCentre(float x, float y)
 }
 
 // receive user confirmation
-int32 UserInput()
+int UserInput()
 {
-	int32 UserInput = getch();
+	int UserInput = getch();
 	refresh();
 	endwin();
 	clear();
@@ -66,14 +65,14 @@ int32 UserInput()
 
 
 // print start menu
-int32 IsUserReady() 
+int IsUserReady() 
 {
 	ClearCentre(3, 2.5);
 	printw("Welcome to the Snake Game. Are you ready? (y/n)");
 	return UserInput();
 }
 
-int32 AskUserName()
+int AskUserName()
 {
 	ClearCentre(3, 2.5);
 	printw("Please enter your name: ");
@@ -86,7 +85,7 @@ int32 AskUserName()
 }
 
 // print end of the game menu and ask user to play again
-int32 AskUserToPlayAgain()
+int AskUserToPlayAgain()
 {
 	ClearCentre(3, 2.5);
 	printw("Do you want to play again, ");

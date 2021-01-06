@@ -10,9 +10,8 @@ time_t t1 = time(NULL);
 using namespace std;
 
 // Unreal coding standards
-using int32 = int;
 
-CharPosition::CharPosition(int32 col, int32 row)
+CharPosition::CharPosition(int col, int row)
 {
 	x = col;
 	y = row;
@@ -77,25 +76,25 @@ void fSnakeGame::InitGameWindow()
 // draw the game window
 void fSnakeGame::DrawWindow()
 {
-	for (int32 i = 0; i < maxwidth; i++) // draws top
+	for (int i = 0; i < maxwidth; i++) // draws top
 	{
 		move(0, i);
 		addch(edgechar);
 	}
 
-	for (int32 i = 0; i < maxwidth; i++) // draws bottom
+	for (int i = 0; i < maxwidth; i++) // draws bottom
 	{
 		move(maxheight-2, i);
 		addch(edgechar);
 	}
 
-	for (int32 i = 0; i < maxheight-1; i++) // draws left side
+	for (int i = 0; i < maxheight-1; i++) // draws left side
 	{
 		move(i, 0);
 		addch(edgechar);
 	}
 
-	for (int32 i = 0; i < maxheight-1; i++) // draws right side
+	for (int i = 0; i < maxheight-1; i++) // draws right side
 	{
 		move(i, maxwidth-1);
 		addch(edgechar);
@@ -106,12 +105,12 @@ void fSnakeGame::DrawWindow()
 // draw snake's body
 void fSnakeGame::DrawSnake()
 {
-	for (int32 i = 0; i < 5; i++) 
+	for (int i = 0; i < 5; i++) 
 	{
 		snake.push_back(CharPosition(30+i, 10));
 	}
 
-	for (int32 i = 0; i < snake.size(); i++)
+	for (int i = 0; i < snake.size(); i++)
 	{
 		move(snake[i].y, snake[i].x);
 		addch(partchar);
@@ -142,11 +141,11 @@ void fSnakeGame::PositionFruit()
 {
 	while(1)
 	{
-		int32 tmpx = rand()%maxwidth+1; // +1 to avoid the 0
-		int32 tmpy = rand()%maxheight+1;
+		int tmpx = rand()%maxwidth+1; // +1 to avoid the 0
+		int tmpy = rand()%maxheight+1;
 
 		// check that the fruit is not positioned on the snake
-		for (int32 i = 0; i < snake.size(); i++)
+		for (int i = 0; i < snake.size(); i++)
 		{
 			if (snake[i].x == tmpx && snake[i].y == tmpy)
 			{
@@ -177,11 +176,11 @@ void fSnakeGame::PositionBadFruit()
 {
 	while(1)
 	{
-		int32 tmpx = rand()%maxwidth+1; // +1 to avoid the 0
-		int32 tmpy = rand()%maxheight+1;
+		int tmpx = rand()%maxwidth+1; // +1 to avoid the 0
+		int tmpy = rand()%maxheight+1;
 
 		// check that the fruit is not positioned on the snake
-		for (int32 i = 0; i < snake.size(); i++)
+		for (int i = 0; i < snake.size(); i++)
 		{
 			if (snake[i].x == tmpx && snake[i].y == tmpy)
 			{
@@ -218,7 +217,7 @@ bool fSnakeGame::FatalCollision()
 	}
 
 	// if the snake collides into himself
-	for (int32 i = 2; i < snake.size(); i++)
+	for (int i = 2; i < snake.size(); i++)
 	{
 		if (snake[0].x == snake[i].x && snake[0].y == snake[i].y)
 		{
@@ -280,7 +279,7 @@ bool fSnakeGame::GetsBadFruit()
 // define snake's movements
 void fSnakeGame::MoveSnake()
 {
-	int32 KeyPressed = getch();
+	int KeyPressed = getch();
 	switch(KeyPressed)
 	{
 		case KEY_LEFT:
