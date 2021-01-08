@@ -92,7 +92,7 @@ int AskUserName()
 int ChooseSpeed()
 {
 	move(10, 5);
-	printw("Choose the speed (1 for slowest, 10 for fastest!): ");
+	printw("Choose the speed (0 for slowest, 9 for fastest): ");
 	refresh();	
 	echo();
 	getstr(level);
