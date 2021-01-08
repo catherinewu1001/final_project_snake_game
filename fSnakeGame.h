@@ -12,6 +12,8 @@ The game is a very simple version of the classic snake game.
 #define FSNAKEGAME_H
 
 extern char name[10];
+extern char level[1];
+extern char pattern[1];
 
 struct CharPosition 
 {
@@ -23,11 +25,11 @@ class fSnakeGame
 {
 private:
 	int score, del, maxwidth, maxheight;
-	char direction, partchar, edgechar, fruitchar, badfruitchar, aachar;
+	char direction, partchar, edgechar, fruitchar, badfruitchar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
 	// fruitchar is the character representing the fruit
-	// del stands for delay
+	// del stands for ay
 	bool bEatsFruit;
 	bool bEatsBadFruit;
 
@@ -52,6 +54,7 @@ private:
 	bool GetsBadFruit();
 
 public:
+
 	fSnakeGame();
 	~fSnakeGame(); // destructor for cleanup and memory deallocation
 	void PlayGame();

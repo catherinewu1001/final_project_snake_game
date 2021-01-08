@@ -9,8 +9,6 @@ time_t t1 = time(NULL);
 
 using namespace std;
 
-// Unreal coding standards
-
 CharPosition::CharPosition(int col, int row)
 {
 	x = col;
@@ -26,7 +24,7 @@ CharPosition::CharPosition()
 fSnakeGame::fSnakeGame()
 {
 	// variables initialisation:
-	partchar = 'x'; // character to represent the snake
+	partchar = pattern[0]; // character to represent the snake
 	edgechar = (char)219; // full rectangle on the key table
 	fruitchar = '*'; 
 	fruit.x = 0;
@@ -35,7 +33,7 @@ fSnakeGame::fSnakeGame()
 	badfruit.x = 0;
 	badfruit.y = 0;
 	score = 0;
-	del = 150000;
+	del = 150000 - atoi(level)*10000;
 	bool bEatsFruit = 0;
 	bool bEatsBadFruit = 1; //這邊要改
 	direction = 'l';
@@ -204,8 +202,6 @@ void fSnakeGame::PositionBadFruit()
 	addch(badfruitchar);
 	refresh();
 }
-
-
 
 // set game over situations
 bool fSnakeGame::FatalCollision()

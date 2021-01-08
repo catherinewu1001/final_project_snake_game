@@ -6,25 +6,30 @@ This is handling all user interaction. For game logic, please see fSnakeGame.h.
 #include <stdio.h>
 #include <time.h>
 
-// Unreal standards
 
 int maxheight, maxwidth;
 void PlayGame();
 int IsUserReady();
+int ChooseSpeed();
+int ChooseBody();
 int AskUserName();
 int AskUserToPlayAgain();
 void ClearCentre();
 int UserInput();
 //int UserInputName();
 char name[10];
-
+char level[1];
+char pattern[1];
 
 int main ()
 {	
 	if (IsUserReady() == 'y') // wait for confirmation of the user
 	do {
+		ChooseSpeed();		
+		refresh();
+		ChooseBody();
+		refresh();
 		AskUserName();
-
 		{
 			fSnakeGame NewSnake;
 			NewSnake.PlayGame();
@@ -79,6 +84,30 @@ int AskUserName()
 	refresh();	
 	echo();
 	getstr(name);
+	noecho();
+	endwin();
+	clear();
+}
+
+int ChooseSpeed()
+{
+	move(10, 5);
+	printw("Choose the speed (1 for slowest, 10 for fastest!): ");
+	refresh();	
+	echo();
+	getstr(level);
+	noecho();
+	endwin();
+	clear();
+}
+
+int ChooseBody()
+{
+	ClearCentre(3, 2.5);
+	printw("Choose snake body's pattern: ");
+	refresh();	
+	echo();
+	getstr(pattern);
 	noecho();
 	endwin();
 	clear();
