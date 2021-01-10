@@ -14,6 +14,7 @@ The game is a very simple version of the classic snake game.
 extern char name[10];
 extern char level[1];
 extern char pattern[1];
+const int MaxWallNumber = 10; 
 
 struct CharPosition 
 {
@@ -37,9 +38,15 @@ private:
 	CharPosition badfruit;    
 
 	std::vector<CharPosition> snake; // represent the snake's body
-
+	int wallNumber;
+	int vertical[MaxWallNumber];
+	int start1[MaxWallNumber];
+	int start2[MaxWallNumber];
+	int length[MaxWallNumber];
+	
 	void InitGameWindow();
 	void DrawWindow();  
+	void DrawWall();
 	void DrawSnake();
 	void PrintScore();
 	void PrintName();
@@ -49,6 +56,7 @@ private:
 	void Positionaa();   
 
 	bool FatalCollision();
+	bool WallCollision();
 	void MoveSnake();
 	bool GetsFruit();
 	bool GetsBadFruit();

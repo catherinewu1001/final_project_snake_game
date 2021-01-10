@@ -42,14 +42,19 @@ int main ()
 // clear the screen and centre the cursor
 void ClearCentre(float x, float y)
 {
-	clear(); // clear the screen if the game is played for the 2nd time 
- 	initscr(); 
- 	start_color(); //改顏色
- 	init_pair(1, COLOR_RED, COLOR_GREEN);
- 	init_pair(2, COLOR_BLACK, COLOR_WHITE);
- 	init_pair(3, COLOR_BLUE, COLOR_YELLOW);
- 	//attron(COLOR_PAIR(1);
-	wbkgd(stdscr, COLOR_PAIR(2)); //可以選擇要第幾個pair（可再新增配色）
+	clear(); // clear the screen if the game is played for the 2nd time	
+	initscr(); 
+	start_color();
+	init_pair(1, COLOR_RED, COLOR_GREEN);
+	init_pair(2, COLOR_BLACK, COLOR_WHITE);
+	init_pair(3, COLOR_BLUE, COLOR_YELLOW);
+	init_pair(4, COLOR_GREEN, COLOR_YELLOW);
+	init_pair(5, COLOR_YELLOW, COLOR_RED);
+	init_pair(6, COLOR_MAGENTA ,COLOR_CYAN);
+	init_pair(7, COLOR_CYAN, COLOR_MAGENTA);
+	//attron(COLOR_PAIR(1);
+	int color = rand() % 7 + 1;
+	wbkgd(stdscr, COLOR_PAIR(color));
 	//refresh();
  
  	noecho();
