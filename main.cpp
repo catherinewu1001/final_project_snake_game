@@ -5,7 +5,7 @@ This is handling all user interaction. For game logic, please see fSnakeGame.h.
 #include "fSnakeGame.h"
 #include <stdio.h>
 #include <time.h>
-
+extern int color;
 
 int maxheight, maxwidth;
 void PlayGame();
@@ -28,7 +28,7 @@ int main ()
 		ChooseSpeed();		
 		refresh();
 		ChooseBody();
-		refresh();
+		//refresh();
 		AskUserName();
 		{
 			fSnakeGame NewSnake;
@@ -45,17 +45,15 @@ void ClearCentre(float x, float y)
 	clear(); // clear the screen if the game is played for the 2nd time	
 	initscr(); 
 	start_color();
-	init_pair(1, COLOR_RED, COLOR_GREEN);
-	init_pair(2, COLOR_BLACK, COLOR_WHITE);
+	init_pair(1, COLOR_BLACK, COLOR_WHITE);
+	init_pair(2, COLOR_BLUE, COLOR_WHITE);
 	init_pair(3, COLOR_BLUE, COLOR_YELLOW);
-	init_pair(4, COLOR_GREEN, COLOR_YELLOW);
-	init_pair(5, COLOR_YELLOW, COLOR_RED);
-	init_pair(6, COLOR_MAGENTA ,COLOR_CYAN);
-	init_pair(7, COLOR_CYAN, COLOR_MAGENTA);
-	//attron(COLOR_PAIR(1);
+	init_pair(4, COLOR_WHITE, COLOR_BLUE);
+	init_pair(5, COLOR_WHITE, COLOR_RED);
+	init_pair(6, COLOR_BLACK, COLOR_WHITE);
+	init_pair(7, COLOR_WHITE, COLOR_RED);
 	int color = rand() % 7 + 1;
 	wbkgd(stdscr, COLOR_PAIR(color));
-	//refresh();
  
  	noecho();
  	getmaxyx(stdscr, maxheight, maxwidth);
@@ -86,7 +84,7 @@ int AskUserName()
 {
 	ClearCentre(3, 2.5);
 	printw("Please enter your name: ");
-	refresh();	
+	//refresh();	
 	echo();
 	getstr(name);
 	noecho();
@@ -98,7 +96,7 @@ int ChooseSpeed()
 {
 	move(10, 5);
 	printw("Choose the speed (0 for slowest, 9 for fastest): ");
-	refresh();	
+	//refresh();	
 	echo();
 	getstr(level);
 	noecho();
@@ -110,7 +108,7 @@ int ChooseBody()
 {
 	ClearCentre(3, 2.5);
 	printw("Choose snake body's pattern: ");
-	refresh();	
+	//refresh();	
 	echo();
 	getstr(pattern);
 	noecho();

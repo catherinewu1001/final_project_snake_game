@@ -106,6 +106,7 @@ void fSnakeGame::InitGameWindow()
 	initscr(); // initialise the screen
 	start_color(); // we can now use colours in the terminal
 	init_pair(1, COLOR_WHITE, COLOR_YELLOW); 
+	//wbkgd(stdscr, COLOR_PAIR(color));
 	nodelay(stdscr,TRUE);
 	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
 	noecho(); // user input is not displayed on the screen
@@ -189,16 +190,16 @@ void fSnakeGame::DrawSnake()
 // print score at bottom of window
 void fSnakeGame::PrintScore()
 {
-	move(maxheight-1, 0);
+	move(maxheight-1, 20);
 	//printw("Score: %d", score);
-	printw("Score: %d, Fruit @ (%d, %d)", score, fruit.x, fruit.y);
+	printw("Score: %d, Fruit at (%d, %d)", score, fruit.x, fruit.y);
 	return;
 }
 
 // print UserName at bottom of window
 void fSnakeGame::PrintName()
 {
-	move(maxheight - 1, 15);
+	move(maxheight - 1, 0);
 	printw("Player: ");
 	printw(name);
 	return;
