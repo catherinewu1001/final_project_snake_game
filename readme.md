@@ -12,3 +12,8 @@ g++ fSnakeGame.cpp main.cpp -lncurses
 
 這樣就能進入遊戲了！
 
+Customized Settings:
+爬行速度
+蛇的身體樣式
+玩家名
+
