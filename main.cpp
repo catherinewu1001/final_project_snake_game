@@ -58,6 +58,7 @@ void ClearCentre(float x, float y)
  	noecho();
  	getmaxyx(stdscr, maxheight, maxwidth);
  	move((maxheight/y), (maxwidth/x));
+	move(x,y);
 }
 
 // receive user confirmation
@@ -75,14 +76,14 @@ int UserInput()
 // print start menu
 int IsUserReady() 
 {
-	ClearCentre(3, 2.5);
+	ClearCentre(10, 5);
 	printw("Welcome to the Snake Game. Are you ready? (y/n)");
 	return UserInput();
 }
 
 int AskUserName()
 {
-	ClearCentre(3, 2.5);
+	move(10, 5);
 	printw("Please enter your name: ");
 	//refresh();	
 	echo();
@@ -106,7 +107,7 @@ int ChooseSpeed()
 
 int ChooseBody()
 {
-	ClearCentre(3, 2.5);
+	move(10, 5);
 	printw("Choose snake body's pattern: ");
 	//refresh();	
 	echo();
@@ -119,7 +120,7 @@ int ChooseBody()
 // print end of the game menu and ask user to play again
 int AskUserToPlayAgain()
 {
-	ClearCentre(3, 2.5);
+	ClearCentre(10, 5);
 	printw("Do you want to play again, ");
 	printw(name);
 	printw("? (y/n)");

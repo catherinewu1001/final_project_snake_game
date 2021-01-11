@@ -38,54 +38,32 @@ fSnakeGame::fSnakeGame()
 	bool bEatsBadFruit = 1; //這邊要改
 	direction = 'l';
 	srand(time(NULL));
- 	/*
-	wallNumber = 2;	
-	vertical[0] = 1;
-	start1[0] = 10;
-	start2[0] = 10;
-	length[0] = 15;
-	
-	vertical[1] = 1;
-	start1[1] = 20;
-	start2[1] = 20;
-	length[1] = 15;
-	
-	vertical[2] = 1;
-	start1[2] = 25;
-	start2[2] = 25;
-	length[2] = 15;
-	*/
-	 
+
 	InitGameWindow();
 
-	
-	wallNumber = (MaxWallNumber / 2) + (rand() % (MaxWallNumber / 2)) + 1; //牆的數量是隨機的 (6~10) 
-	//cout << "wallNumber=" << wallNumber << endl;
+	//牆的位置已經先決定出來了 但還沒draw
+	wallNumber = (MaxWallNumber / 2) + (rand() % (MaxWallNumber / 2)) + 1; //牆的數量 隨機的 (6~10) 
 	for(int i = 0; i < wallNumber; i ++){
-		vertical[i] = rand() % 2; //0 OR 1
-		//cout << "vertical=" << vertical[i] << endl;
+		vertical[i] = rand() % 2; //0 OR 1 //橫或是直也是隨機
 		if (vertical[i] == 1){ //垂直 
+		//決定起始位置
 			start1[i] = rand() % (maxwidth - 2) + 1;
 			start2[i] = rand() % (maxheight - 3) + 1;
-			length[i] = rand() % (maxheight / 2); //讓最大長度不要超過高度一半 
+			length[i] = rand() % (maxheight / 2); //最大長度不超過高度一半 
 		} else { //水平 
 			start1[i] = rand() % (maxheight - 3) + 1;
 			start2[i] = rand() % (maxwidth - 2) + 1;
 			length[i] = rand() % (maxwidth / 2);
 		}
 	}
-	
-	
-	/*
-	for (int i = 0; i < MaxWallNumber; i ++){
-		cout << vertical[i] << "," << start1[i] << "," << start2[i] << "," << length[i] << endl;
-	}
-	*/
-	
+	//畫上好壞蘋果
 	PositionFruit();
     PositionBadFruit();
-	DrawWindow();
-	DrawWall();
+	//畫邊邊
+	DrawWindow(); 
+	//畫牆壁
+	DrawWall(); 
+
 	DrawSnake();
 	PrintScore();
 	PrintName();
@@ -156,7 +134,7 @@ void fSnakeGame::DrawWall()
 				move(row, col);
 				addch(edgechar);
 			}
-		} else {
+		} else {//水平
 			int row = start1[i];
 			for (int j = 0; j < length[i]; j ++){
 				int col = start2[i] + j;
@@ -192,7 +170,7 @@ void fSnakeGame::PrintScore()
 {
 	move(maxheight-1, 20);
 	//printw("Score: %d", score);
-	printw("Score: %d, Fruit at (%d, %d)", score, fruit.x, fruit.y);
+	printw("     Score:%d          Fruit at %d,%d ", score, maxwidth-1 - fruit.x, maxheight-1 - fruit.y);
 	return;
 }
 
@@ -357,21 +335,11 @@ bool fSnakeGame::FatalCollision()
 
 bool fSnakeGame::WallCollision()
 {
-	// if the snake hits the edge of the window
-	/*
-	if (snake[0].x == 5){
-		if (snake[0].y >= 5 && snake[0].y < 15) return true;
-	}
-
-	if (snake[0].y == 20){
-		if (snake[0].x >= 20 && snake[0].x < 36) return true;
-	}
-	*/
 	for (int i = 0; i < wallNumber; i ++){
 		if (vertical[i]){ //垂直 
 			if (snake[0].x == start1[i]){
-				if (snake[0].y >= start2[i] && snake[0].y < start2[i] + length[i]) return true;
-				if ((snake[0].y + maxheight - 3) < start2[i] + length[i] - 1) return true; //上面碰撞 
+				if (snake[0].y >= start2[i] && snake[0].y < start2[i] + length[i]) return true;//正常牆壁 判別法
+				if ((snake[0].y + maxheight - 3) < start2[i] + length[i] - 1) return true; //太長的牆壁 判別法
 			}
 		} else {
 			if (snake[0].y == start1[i]){
@@ -491,11 +459,15 @@ void fSnakeGame::PlayGame()
     while(1)
     {
         if (FatalCollision() || WallCollision())
-        {
-            move((maxheight-2)/2,(maxwidth-5)/2);
-            printw("GAME OVER");
-            break;
-        }
+		{
+			move((maxheight - 2) / 2, (maxwidth - 5) / 2);
+			attron(A_BOLD);
+			printw("GAME OVER");
+			attroff(A_BOLD);
+			move((maxheight) / 2, (maxwidth - 11) / 2);
+			printw("Your score is %d", score);
+			break;
+		}
 
         GetsFruit();	
 		GetsBadFruit();
