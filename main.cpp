@@ -1,7 +1,3 @@
-/*
-This is the console executable, that makes use of the fSnakeGame class.
-This is handling all user interaction. For game logic, please see fSnakeGame.h.
-*/
 #include "fSnakeGame.h"
 #include <stdio.h>
 #include <time.h>
@@ -16,7 +12,7 @@ int AskUserName();
 int AskUserToPlayAgain();
 void ClearCentre();
 int UserInput();
-//int UserInputName();
+
 char name[10];
 char level[1];
 char pattern[1];
@@ -28,7 +24,6 @@ int main ()
 		ChooseSpeed();		
 		refresh();
 		ChooseBody();
-		//refresh();
 		AskUserName();
 		{
 			fSnakeGame NewSnake;
@@ -72,8 +67,6 @@ int UserInput()
 	return UserInput;	
 }
 
-
-// print start menu
 int IsUserReady() 
 {
 	ClearCentre(10, 5);
@@ -85,7 +78,6 @@ int AskUserName()
 {
 	move(10, 5);
 	printw("Please enter your name: ");
-	//refresh();	
 	echo();
 	getstr(name);
 	noecho();
@@ -97,7 +89,6 @@ int ChooseSpeed()
 {
 	move(10, 5);
 	printw("Choose the speed (0 for slowest, 9 for fastest): ");
-	//refresh();	
 	echo();
 	getstr(level);
 	noecho();
@@ -109,15 +100,13 @@ int ChooseBody()
 {
 	move(10, 5);
 	printw("Choose snake body's pattern: ");
-	//refresh();	
-	echo();
+]	echo();
 	getstr(pattern);
 	noecho();
 	endwin();
 	clear();
 }
 
-// print end of the game menu and ask user to play again
 int AskUserToPlayAgain()
 {
 	ClearCentre(10, 5);

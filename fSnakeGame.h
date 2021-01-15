@@ -1,6 +1,6 @@
 /*
-This is the game logic (no user interaction).
-The game is a very simple version of the classic snake game.
+game logic 
+(not user interaction)
 */
 
 #include <iostream>
@@ -27,17 +27,16 @@ class fSnakeGame
 private:
 	int score, del, maxwidth, maxheight;
 	char direction, partchar, edgechar, fruitchar, badfruitchar;
-	// partchar is the character representing the snake's body
-	// edgechar is the character representing the edge of the game window
-	// fruitchar is the character representing the fruit
-	// del stands for ay
+	// partchar : snake's body
+	// edgechar : the edge of the game window
+	// del :delay
 	bool bEatsFruit;
 	bool bEatsBadFruit;
 
-	CharPosition fruit; // need to clarify this combination 
+	CharPosition fruit;
 	CharPosition badfruit;    
 
-	std::vector<CharPosition> snake; // represent the snake's body
+	std::vector<CharPosition> snake; 
 	int wallNumber;
 	int vertical[MaxWallNumber];
 	int start1[MaxWallNumber];
@@ -53,7 +52,6 @@ private:
 
 	void PositionFruit();
  	void PositionBadFruit();   
-	void Positionaa();   
 
 	bool FatalCollision();
 	bool WallCollision();
@@ -64,7 +62,7 @@ private:
 public:
 
 	fSnakeGame();
-	~fSnakeGame(); // destructor for cleanup and memory deallocation
+	~fSnakeGame(); 
 	void PlayGame();
 };
 

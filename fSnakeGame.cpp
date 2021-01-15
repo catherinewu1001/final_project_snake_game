@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include <time.h>
 
-
-time_t t1 = time(NULL);
-
 using namespace std;
 
 CharPosition::CharPosition(int col, int row)
@@ -78,13 +75,12 @@ fSnakeGame::~fSnakeGame()
 	endwin();
 }
 
-// initialise the game window
+// 初始化game window
 void fSnakeGame::InitGameWindow() 
 { 
 	initscr(); // initialise the screen
 	start_color(); // we can now use colours in the terminal
 	init_pair(1, COLOR_WHITE, COLOR_YELLOW); 
-	//wbkgd(stdscr, COLOR_PAIR(color));
 	nodelay(stdscr,TRUE);
 	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
 	noecho(); // user input is not displayed on the screen
@@ -93,7 +89,6 @@ void fSnakeGame::InitGameWindow()
 	return; 
 }
 
-// draw the game window
 void fSnakeGame::DrawWindow()
 {
 	for (int i = 0; i < maxwidth; i++) // draws top
@@ -149,7 +144,6 @@ void fSnakeGame::DrawWall()
 	return;
 }
 
-// draw snake's body
 void fSnakeGame::DrawSnake()
 {
 	for (int i = 0; i < 5; i++) 
@@ -165,16 +159,15 @@ void fSnakeGame::DrawSnake()
 	return;
 }
 
-// print score at bottom of window
+// 印分數
 void fSnakeGame::PrintScore()
 {
 	move(maxheight-1, 20);
-	//printw("Score: %d", score);
 	printw("     Score:%d          Fruit at %d,%d ", score, maxwidth-1 - fruit.x, maxheight-1 - fruit.y);
 	return;
 }
 
-// print UserName at bottom of window
+// 印玩家名
 void fSnakeGame::PrintName()
 {
 	move(maxheight - 1, 0);
@@ -183,7 +176,7 @@ void fSnakeGame::PrintName()
 	return;
 }
 
-// position a new fruit in the game window
+// 好蘋果
 void fSnakeGame::PositionFruit()
 {
 	while(1)
@@ -236,7 +229,6 @@ void fSnakeGame::PositionFruit()
 		if(conflict)
 			continue;
 
-		// if the coordinates are valid, add fruit in the window
 		fruit.x = tmpx;
 		fruit.y = tmpy;
 		break;
@@ -301,7 +293,6 @@ void fSnakeGame::PositionBadFruit()
 		if(conflict)
 			continue;
 
-		// if the coordinates are valid, add fruit in the window
 		badfruit.x = tmpx;
 		badfruit.y = tmpy;
 		break;
@@ -312,7 +303,7 @@ void fSnakeGame::PositionBadFruit()
 	refresh();
 }
 
-// set game over situations
+//撞到邊界/自己 判斷
 bool fSnakeGame::FatalCollision()
 {
 	// if the snake hits the edge of the window
@@ -332,7 +323,7 @@ bool fSnakeGame::FatalCollision()
 
 	return false;
 }
-
+//撞到牆 判斷
 bool fSnakeGame::WallCollision()
 {
 	for (int i = 0; i < wallNumber; i ++){
@@ -352,7 +343,7 @@ bool fSnakeGame::WallCollision()
 	return false;
 }
 
-// define behaviour when snake eats the fruit
+// 吃到好蘋果：加分
 bool fSnakeGame::GetsFruit()
 {
 	if (snake[0].x == fruit.x && snake[0].y == fruit.y)
@@ -374,11 +365,11 @@ bool fSnakeGame::GetsFruit()
 	}
 	return bEatsFruit;
 }
-
+//吃到壞蘋果 扣分
 bool fSnakeGame::GetsBadFruit()
 {	
 	
-	if (snake[0].x == badfruit.x && snake[0].y == badfruit.y)//無限增生........
+	if (snake[0].x == badfruit.x && snake[0].y == badfruit.y)
 	{
 		PositionBadFruit(); 
 		score -= 10; 
@@ -386,12 +377,7 @@ bool fSnakeGame::GetsBadFruit()
 
 		return bEatsBadFruit = false;
 	}
-	/*
-	else if(t1%1 == 0){
-		PositionBadFruit(); 
-		return bEatsBadFruit = false;//無限增生........
-	}
-	*/
+
 	else 
 	{
 		return bEatsBadFruit = true;
@@ -400,7 +386,7 @@ bool fSnakeGame::GetsBadFruit()
 	
 }
 
-// define snake's movements
+//鍵盤控制
 void fSnakeGame::MoveSnake()
 {
 	int KeyPressed = getch();
